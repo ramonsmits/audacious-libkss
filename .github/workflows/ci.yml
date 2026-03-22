@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        fedora: [42, 43]
+    runs-on: ubuntu-latest
+    container: fedora:${{ matrix.fedora }}
+    steps:
+      - name: Install dependencies
+        run: dnf install -y audacious-devel cmake gcc g++ make git
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
