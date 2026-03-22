@@ -1,0 +1,4 @@
+build/
+.git/
+libkss/.git
+Containerfile
